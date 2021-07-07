@@ -1,0 +1,63 @@
+# python's gitignore
+
+# python compiled
+*.py[cod]
+*$py.class
+__pycache__/
+
+# git
+.git
+.github
+
+# ide os
+.DS_Store
+.idea
+.vscode
+*.swp
+# logs/
+
+# distribution packaging
+MANIFEST
+*.so
+build/
+dist/
+wheels/
+*.egg
+*.egg-info/
+eggs/
+.eggs/
+lib/
+lib64/
+.installed.cfg
+
+# unit-test coverage
+.pytest_cache/
+nosetests.xml
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*.cover
+*.py,cover
+cover/
+.qiniu_pythonsdk_hostscache.json
+
+# translation
+*.mo
+*.pot
+
+# environment root
+.env
+.env3
+.venv
+.venv3
+env/
+env3/
+venv/
+venv3/
+
+# documentation build
+docs/_build/
