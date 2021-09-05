@@ -11,7 +11,8 @@ import time
 
 import xlrd
 from docx import Document
-from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.shared import Pt
+from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
 
 
 class Order(cmd.Cmd):
@@ -78,7 +79,10 @@ class ExcelToWord(object):
     def format_to_index(self):
         str_text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         res = {f"{item}{index + 1}": index for index, item in enumerate(str_text)}
-        res.update({"AA27": 26, "AB28": 27, "AC29": 28})
+        res.update({
+            "AA27": 26, "AB28": 27, "AC29": 28, "AD30": 29, "AE31": 30, "AF32": 31, "AG33": 32, "AH34": 33, "AI35": 34,
+            "AJ36": 35, "AK37": 36, "AL38": 37
+        })
         return res
 
     def save(self, document, name):
@@ -112,8 +116,17 @@ class ExcelToWord(object):
                 for c, cell in enumerate(row.cells):
                     text = cell.text.strip()
                     if text in self.format_dict.keys():
-                        cell.text = str(data[self.format_dict.get(text)])
-                        if text in ("AA27", "AB28", "AC29", "Z26", "X24", "Y25"):
+                        # VAT组装
+                        if text == "AI35":
+                            vat_text = float(data[self.format_dict.get(text)]) * 100
+                            cell.text = f"VAT({int(vat_text)}%):"
+                            vat_obj = tb.cell(r, c).paragraphs[0].runs[0]
+                            vat_obj.bold = True
+                            vat_obj.font.size = Pt(12)
+                            tb.cell(r, c).vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+                        else:
+                            cell.text = str(data[self.format_dict.get(text)])
+                        if text in ("AF32", "AG33", "AH34", "AJ36", "AK37", "AL38"):
                             tb.cell(r, c).paragraphs[0].paragraph_format.alignment = WD_TABLE_ALIGNMENT.RIGHT
         #保存
         self.save(document, data[0])
@@ -130,3 +143,4 @@ class ExcelToWord(object):
 
 if __name__ == "__main__":
     Order().cmdloop()
+    # Order().main()
